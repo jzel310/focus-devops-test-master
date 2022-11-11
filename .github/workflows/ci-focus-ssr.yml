@@ -31,6 +31,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   deploy:
+    needs: push_to_registry
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +41,8 @@ jobs:
       run: |
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        cat ${HOME}/.kube/config
     - name: Use context
       run: kubectl config use-context do-sfo3-focuscluster-cluster
     - name: Deploy to K8s
-      run: helm upgrade -f helm/ssr/test-ssr/values.yaml focusssr helm/ssr/test-ssr/  
+      run: helm upgrade -f helm/ssr/test-ssr/values.yaml focussr helm/ssr/test-ssr/  
