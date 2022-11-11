@@ -28,5 +28,5 @@ jobs:
           context: focus-ssr/
           file: focus-ssr/Dockerfile
           push: true
-          tags: latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
