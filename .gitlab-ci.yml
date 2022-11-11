@@ -17,7 +17,6 @@ docker-build:
     - docker push "$CI_REGISTRY_IMAGE:latest"
   except:
     - master
-    s
 deploy:
   stage: deploy
   image: dtzar/helm-kubectl:3.5.3
