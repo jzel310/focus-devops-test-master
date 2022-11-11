@@ -1,3 +1,9 @@
+stages:
+  - docker-build
+  - deploy
+
+variables:
+  KUBECONFIG: /etc/deploy/config
 docker-build:
   # Official docker image.
   image: docker:latest
@@ -11,3 +17,13 @@ docker-build:
     - docker push "$CI_REGISTRY_IMAGE:latest"
   except:
     - master
+    s
+deploy:
+  stage: deploy
+  image: dtzar/helm-kubectl:3.5.3
+  before_script:
+    - mkdir -p /etc/deploy
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+    - kubectl config use-context do-sfo3-focuscluster-cluster
+  script:
+    - helm install -f helm/spa/test-spa/values.yaml focusspa helm/spa/test-spa/
