@@ -1,0 +1,45 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 7000
+    restart: unless-stopped
+    depends_on: 
+      - redis
+      - postgres
+    environment: 
+      REDIS_HOST: redis
+      REDIS_PORT: 6379  
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432   
+    networks: 
+      - backend   
+  redis:
+    image: "redis:alpine"   
+    restart: unless-stopped
+    networks:
+      - backend
+  postgres:
+    container_name: 'postgres'
+    image: 'postgres:9.5.3'
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data/'
+  nginx_app:
+    image: nginx:latest
+    depends_on:
+      - app
+    volumes:
+      - ./default.conf:/mnt/c/Users/jzel/nginx/conf.d/default.conf ## if using WSL needed to be a Windows path otherwise it fails
+    ports:
+      - 8080:80
+
+networks:
+  backend:
+
+volumes:
+  pgdata:
