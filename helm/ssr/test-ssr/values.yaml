@@ -1,14 +1,14 @@
 replicaCount: 1
 
 image:
-  repository: registry.digitalocean.com/focustest/focustest
-  tag: latest
+  repository: jzel310/focusssr
+  tag: main
   pullPolicy: Always
 
 service:
   type: NodePort
-  port: 8000
-  nodePort: 30163
+  port: 7000
+  nodePort: 30169
 
 ingress:
   enabled: false
